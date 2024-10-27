@@ -26,4 +26,16 @@ userController.createUser = async (req, res) => {
   }
 };
 
+userController.getUser = async (req, res) => {
+  try {
+    const { userId } = req;
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("해당 유저가 없습니다.");
+    }
+    res.status(200).json({ status: "success", user });
+  } catch (err) {
+    res.status(400).json({ status: "fail", message: err.message });
+  }
+};
 module.exports = userController;
