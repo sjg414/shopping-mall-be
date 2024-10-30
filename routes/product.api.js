@@ -10,5 +10,5 @@ router.post(
   productController.createProduct
 ); //상품생성, admin만 접근 가능
 
-router.get("/get", productController.getProduct);
+router.get("/", productController.getProducts);
 module.exports = router;

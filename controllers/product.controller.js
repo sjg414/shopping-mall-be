@@ -24,7 +24,8 @@ productController.createProduct = async (req, res) => {
   }
 };
 
-productController.getProduct = async (req, res) => {
+//상품가져오기
+productController.getProducts = async (req, res) => {
   try {
     const productList = await Product.find({});
     if (!productList) {
