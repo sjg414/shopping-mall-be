@@ -27,14 +27,17 @@ authController.loginWIthEmail = async (req, res) => {
   }
 };
 
+//토큰 검증
 authController.authenticate = async (req, res, next) => {
   try {
-    const tokenString = req.headers.authorization;
+    const tokenString = req.headers.authorization; //헤더에 저장 된 토큰 값 받기
     if (!tokenString) {
+      //토큰이 없을 시
       throw new Error("ivalid token");
     }
-    const token = tokenString.replace("Bearer ", "");
+    const token = tokenString.replace("Bearer ", ""); //헤더에 저장된 문자 중 Bearer 문자 삭제
     jwt.verify(token, JWT_SECRET_KEY, (error, payload) => {
+      //토큰 검증
       if (error) {
         throw new Error("invalid token");
       }
@@ -46,6 +49,7 @@ authController.authenticate = async (req, res, next) => {
   }
 };
 
+//관리자계정 확인
 authController.checkAdminPermission = async (req, res, next) => {
   try {
     const { userId } = req;
