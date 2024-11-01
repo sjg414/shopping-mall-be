@@ -53,4 +53,50 @@ productController.getProducts = async (req, res) => {
   }
 };
 
+//상품 디테일
+productController.getProductDetail = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await Product.findById({ _id: productId });
+    if (!product) throw new Error("item doesn't exist");
+    res.status(200).json({ status: "success", product });
+  } catch (err) {
+    res.status(400).json({ status: "fail", message: err.message });
+  }
+};
+
+//상품 수정
+productController.updateProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const { sku, name, image, category, description, price, stock, status } =
+      req.body;
+    const product = await Product.findByIdAndUpdate(
+      { _id: productId },
+      { sku, name, image, category, description, price, stock, status },
+      { new: true }
+    );
+    if (!product) throw new Error("item doesn't exist");
+    res.status(200).json({ status: "success", product });
+  } catch (err) {
+    res.status(400).json({ status: "fail", message: err.message });
+  }
+};
+
+//상품 삭제
+productController.deleteProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const deleteProduct = await Product.findByIdAndUpdate(
+      { _id: productId },
+      { isDelete: true },
+      { new: true }
+    );
+    if (!deleteProduct) throw new Error("item doesn't exist");
+    res.status(200).json({ status: "success", deleteProduct });
+  } catch (err) {
+    res.status(400).json({ status: "fail", message: err.message });
+  }
+};
+
 module.exports = productController;
