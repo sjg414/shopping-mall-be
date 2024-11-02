@@ -21,8 +21,8 @@ productController.createProduct = async (req, res) => {
     });
     await product.save();
     res.status(200).json({ status: "success", product });
-  } catch (err) {
-    res.status(400).json({ status: "fail", message: err.message });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
   }
 };
 
@@ -48,8 +48,8 @@ productController.getProducts = async (req, res) => {
       throw new Error("상품이 없습니다.");
     }
     res.status(200).json(response);
-  } catch (err) {
-    res.status(400).json({ status: "fail", message: err.message });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
   }
 };
 
@@ -60,8 +60,8 @@ productController.getProductDetail = async (req, res) => {
     const product = await Product.findById({ _id: productId });
     if (!product) throw new Error("item doesn't exist");
     res.status(200).json({ status: "success", product });
-  } catch (err) {
-    res.status(400).json({ status: "fail", message: err.message });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
   }
 };
 
@@ -78,8 +78,8 @@ productController.updateProduct = async (req, res) => {
     );
     if (!product) throw new Error("item doesn't exist");
     res.status(200).json({ status: "success", product });
-  } catch (err) {
-    res.status(400).json({ status: "fail", message: err.message });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
   }
 };
 
@@ -94,8 +94,8 @@ productController.deleteProduct = async (req, res) => {
     );
     if (!deleteProduct) throw new Error("item doesn't exist");
     res.status(200).json({ status: "success", deleteProduct });
-  } catch (err) {
-    res.status(400).json({ status: "fail", message: err.message });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
   }
 };
 

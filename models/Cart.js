@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const cartSchema = Schema(
   {
-    userId: { type: Schema.Types.ObjectId, required: true, ref: User },
+    userId: { type: mongoose.ObjectId, required: true, ref: User },
     items: [
       {
         productId: { type: Schema.Types.ObjectId, ref: Product },
@@ -17,7 +17,7 @@ const cartSchema = Schema(
   { timestamps: true }
 );
 
-sartSchema.methods.toJSON = function () {
+cartSchema.methods.toJSON = function () {
   const obj = this._doc;
   delete obj.__v;
   delete obj.updatedAt;
@@ -25,5 +25,5 @@ sartSchema.methods.toJSON = function () {
   return obj;
 };
 
-const Cart = mongoose.model("Cart", cartSchema);
+const Cart = mongoose.model("Cart", cartSchema) || mongoose.model.cart;
 module.exports = Cart;

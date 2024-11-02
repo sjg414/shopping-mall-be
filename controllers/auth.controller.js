@@ -22,8 +22,8 @@ authController.loginWIthEmail = async (req, res) => {
     } else {
       throw new Error("비밀번호가 틀렸습니다.");
     }
-  } catch (err) {
-    return res.status(400).json({ status: "fail", message: err.message });
+  } catch (error) {
+    return res.status(400).json({ status: "fail", error: error.message });
   }
 };
 
@@ -44,8 +44,8 @@ authController.authenticate = async (req, res, next) => {
       req.userId = payload._id;
     });
     next();
-  } catch (err) {
-    return res.status(400).json({ status: "fail", message: err.message });
+  } catch (error) {
+    return res.status(400).json({ status: "fail", error: error.message });
   }
 };
 
@@ -61,8 +61,8 @@ authController.checkAdminPermission = async (req, res, next) => {
       throw new Error("no permission");
     }
     next();
-  } catch (err) {
-    return res.status(400).json({ status: "fail", message: err.message });
+  } catch (error) {
+    return res.status(400).json({ status: "fail", error: error.message });
   }
 };
 

@@ -21,8 +21,8 @@ userController.createUser = async (req, res) => {
     });
     await newUser.save();
     return res.status(200).json({ status: "success" });
-  } catch (err) {
-    res.status(400).json({ status: "fail", message: err.message });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
   }
 };
 
@@ -34,8 +34,8 @@ userController.getUser = async (req, res) => {
       throw new Error("해당 유저가 없습니다.");
     }
     res.status(200).json({ status: "success", user });
-  } catch (err) {
-    res.status(400).json({ status: "fail", message: err.message });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
   }
 };
 module.exports = userController;
