@@ -3,6 +3,7 @@ const Cart = require("../models/Cart");
 
 const cartController = {};
 
+//아이템 카트에 추가하기
 cartController.addItemToCart = async (req, res) => {
   try {
     const { userId } = req;
@@ -32,9 +33,11 @@ cartController.addItemToCart = async (req, res) => {
   }
 };
 
+//카트에 담긴 아이템리스트 가져오기
 cartController.getCartList = async (req, res, next) => {
   try {
     const { userId } = req;
+    //외래키로 조인하기(populate) cart 컬렉션에 items의 productId를 이용해 Product 데이터를 참조한다.
     const cart = await Cart.findOne({ userId }).populate({
       path: "items",
       populate: { path: "productId", model: "Product" },
@@ -46,6 +49,7 @@ cartController.getCartList = async (req, res, next) => {
   }
 };
 
+//카트에 담긴 아이템 갯수 가져오기
 cartController.getCartItemQty = async (req, res) => {
   try {
     const { userId } = req;
@@ -60,5 +64,47 @@ cartController.getCartItemQty = async (req, res) => {
   }
 };
 
-cartController.getCartQty = async (req, res) => {};
+//카트에 담긴 아이템 수량 변경
+cartController.updateQty = async (req, res) => {
+  try {
+    const { userId } = req;
+    const productId = req.params.id;
+    const { qty } = req.body;
+    //해당 user의 카트 가져오기
+    const cart = await Cart.findOne({ userId }).populate({
+      path: "items",
+      populate: { path: "productId", model: "Product" },
+    });
+    if (!cart) throw new Error("카트가 존재하지 않습니다.");
+    //해당 아이템 찾기
+    const cartItem = cart.items.find((item) => item.equals(productId));
+    if (!cartItem) throw new Error("item doesn't exist");
+    //수량 변경
+    cartItem.qty = qty;
+    await cart.save();
+    res.status(200).json({ status: "success", data: cart });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
+
+//카트에 담긴 아이템 삭제
+cartController.deleteCartItem = async (req, res) => {
+  try {
+    const { userId } = req;
+    const productId = req.params.id;
+    //user의 카트 검색
+    const cart = await Cart.findOne({ userId });
+    if (!cart) throw new Error("카트가 존재하지 않습니다.");
+    //선택한 아이템 제외
+    cart.items = cart.items.filter((item) => !item.equals(productId));
+    await cart.save();
+    res
+      .status(200)
+      .json({ status: "success", data: cart, cartItemQty: cart.items.length });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
+
 module.exports = cartController;
