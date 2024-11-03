@@ -94,7 +94,10 @@ cartController.deleteCartItem = async (req, res) => {
     const { userId } = req;
     const productId = req.params.id;
     //user의 카트 검색
-    const cart = await Cart.findOne({ userId });
+    const cart = await Cart.findOne({ userId }).populate({
+      path: "items",
+      populate: { path: "productId", model: "Product" },
+    });
     if (!cart) throw new Error("카트가 존재하지 않습니다.");
     //선택한 아이템 제외
     cart.items = cart.items.filter((item) => !item.equals(productId));
